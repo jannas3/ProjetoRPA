@@ -55,6 +55,8 @@ Bashpip install -r requirements.txt
   python main.py
 ---
   ## Estrutura do Projeto
+
+  
 ProjetoRPA/
 ├── .bot/
 ├── data/
@@ -71,3 +73,5 @@ ProjetoRPA/
 ├── README.md
 ├── .gitignore
 └── .env 
+
+---
