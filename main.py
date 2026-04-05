@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 
-# === LINHA MÁGICA QUE RESOLVE O ERRO ===
 sys.path.insert(0, str(Path(__file__).parent.resolve()))
 
 from src.automation.waze_router import abrir_rotas_waze
@@ -15,7 +14,7 @@ def main():
     abrir_rotas_waze(
         caminho_planilha="data/input/entregas_exemplo.xlsx",
         coluna_endereco="endereco",
-        delay_entre_rotas=7,
+        coluna_telefone="telefone",  
     )
 
     logger.info("🎉 ROBÔ FINALIZADO COM SUCESSO!")

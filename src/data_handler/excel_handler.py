@@ -12,11 +12,11 @@ def carregar_entregas(caminho_planilha: str) -> pd.DataFrame:
     caminho = Path(caminho_planilha)
 
     if not caminho.exists():
-        logger.error(f"❌ Planilha não encontrada: {caminho}")
+        logger.error(f" Planilha não encontrada: {caminho}")
         raise FileNotFoundError(f"Planilha não encontrada: {caminho}")
 
-    logger.info(f"📊 Carregando planilha: {caminho.name}")
+    logger.info(f" Carregando planilha: {caminho.name}")
     df = pd.read_excel(caminho)
 
-    logger.info(f"✅ {len(df)} entregas carregadas com sucesso.")
+    logger.info(f" {len(df)} entregas carregadas com sucesso.")
     return df
