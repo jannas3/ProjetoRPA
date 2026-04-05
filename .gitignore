@@ -9,4 +9,4 @@ venv/
 data/output/
 *.log
 .DS_Store
-.bot
+.bot/
