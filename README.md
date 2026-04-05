@@ -33,7 +33,7 @@ O projeto resolve um problema real: automatiza o processo manual que entregadore
 
 ## 📋 Pré-requisitos
 
-- Python 3.9 ou superior
+- Python 3.9 
 - Google Chrome instalado
 - WhatsApp Web já logado (o robô abre o navegador)
 - (Recomendado) Ambiente virtual
@@ -42,9 +42,7 @@ O projeto resolve um problema real: automatiza o processo manual que entregadore
 
 ## 🚀 Como executar (passo a passo)
 
-### 1. Clone o repositório
-```bash
-1. git clone https://github.com/SEU_USUARIO/ProjetoRPA.git
+1. git clone https://github.com/jannas3/ProjetoRPA.git
 cd ProjetoRPA
 
 2. Crie o ambiente virtual
@@ -54,8 +52,9 @@ Bashpython -m venv .bot
 4. Instale as dependências
 Bashpip install -r requirements.txt
 5. Execute o robô
-Bashpython main.py
-
+  python main.py
+---
+  ## Estrutura do Projeto
 ProjetoRPA/
 ├── .bot/
 ├── data/
