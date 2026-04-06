@@ -5,25 +5,21 @@ from typing import Optional, Tuple
 from urllib.parse import quote
 from pathlib import Path
 
-from src.data_handler.excel_handler import carregar_entregas
-from src.utils.logger import configurar_logger
-
+from app.src.data_handler.excel_handler import carregar_entregas
+from app.src.utils.logger import configurar_logger
 
 # CONFIGURAÇÕES GERAIS
 logger = configurar_logger()
-
 DESKTOP_UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/124.0.0.0 Safari/537.36"
 )
-
 DELAY_ENTRE_ROTAS = 15
 ENVIAR_WHATSAPP = True
 MODO_ENVIO_AUTOMATICO = True  
 
 # GEOLOCALIZAÇÃO
-
 def geocodificar_endereco(endereco: str) -> Optional[Tuple[float, float]]:
     try:
         endereco_completo = f"{endereco}, Manaus, AM, Brasil"
@@ -45,7 +41,6 @@ def geocodificar_endereco(endereco: str) -> Optional[Tuple[float, float]]:
         logger.warning(f" Erro na geocodificação: {e}")
 
     return None
-
 
 def geocodificar_com_retry(endereco: str, tentativas: int = 3) -> Optional[Tuple[float, float]]:
     for tentativa in range(1, tentativas + 1):
@@ -75,8 +70,6 @@ def gerar_link_whatsapp(
     return f"https://web.whatsapp.com/send?phone={telefone}&text={quote(mensagem)}"
 
 # AUTOMAÇÃO PRINCIPAL
-
-
 def abrir_rotas_waze(
     caminho_planilha: str,
     coluna_endereco: str = "endereco",
@@ -84,7 +77,7 @@ def abrir_rotas_waze(
 ):
     df = carregar_entregas(caminho_planilha)
 
-    pasta_saida = Path("data/output/rotas_waze_web")
+    pasta_saida = Path("app/data/output/rotas_waze_web")
     pasta_saida.mkdir(parents=True, exist_ok=True)
 
     total = len(df)
@@ -96,14 +89,20 @@ def abrir_rotas_waze(
         browser = p.chromium.launch(
             headless=False,
             slow_mo=250,
-            args=["--start-maximized"],
+            args=[
+                "--start-maximized",
+                "--start-fullscreen",           # ajuda em alguns ambientes Windows
+                "--disable-blink-features=AutomationControlled",  # opcional (reduz detecção)
+            ],
         )
 
         context = browser.new_context(
             user_agent=DESKTOP_UA,
-            viewport={"width": 1920, "height": 1080},
+            viewport=None,                      # ← Essencial! Desabilita viewport fixo
+            no_viewport=True,                   # ← Alternativa ou complemento (algumas versões)
             locale="pt-BR",
             timezone_id="America/Manaus",
+            # device_scale_factor=1,            # só use se precisar forçar DPI
         )
 
         page = context.new_page()
@@ -170,12 +169,16 @@ def abrir_rotas_waze(
                         wait_until="domcontentloaded",
                         timeout=30000,
                     )
+                    page_wpp.bring_to_front()
+
+                    # 🔥 garante carregamento completo
+                    page_wpp.wait_for_load_state("networkidle")
 
                     page_wpp.wait_for_selector(
                         'div[contenteditable="true"][data-tab]',
                         timeout=30000,
                     )
-
+                   
                     time.sleep(2)
                     page_wpp.click('div[contenteditable="true"][data-tab]')
                     time.sleep(1)

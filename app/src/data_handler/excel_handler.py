@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from src.utils.logger import configurar_logger
+from app.src.utils.logger import configurar_logger
 
 logger = configurar_logger()
 
